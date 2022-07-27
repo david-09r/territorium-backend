@@ -17,3 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::middleware('auth:sanctum')->prefix('formation')->group(function () {
+    Route::get('', [\App\Http\Controllers\Api\FormationController::class, 'index']);
+    Route::post('', [\App\Http\Controllers\Api\FormationController::class, 'store']);
+    Route::post('search', [\App\Http\Controllers\Api\FormationController::class, 'show']);
+});
