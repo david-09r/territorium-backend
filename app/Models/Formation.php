@@ -14,4 +14,19 @@ class Formation extends Model
     ];
 
     use HasFactory;
+
+    public function formationTeachers()
+    {
+        return $this->hasMany(FormationTeacher::class);
+    }
+
+    public function formationStudents()
+    {
+        return $this->hasMany(FormationStudent::class);
+    }
+
+    public function areas()
+    {
+        return $this->hasMany(Area::class);
+    }
 }

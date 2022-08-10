@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Task>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\FormationStudent>
  */
-class TaskFactory extends Factory
+class FormationStudentFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,9 +17,7 @@ class TaskFactory extends Factory
     public function definition()
     {
         return [
-            'title' => $this->faker->title,
-            'description' => $this->faker->sentence,
-            'answer' => $this->faker->asciify('????'),
+            //
         ];
     }
 }

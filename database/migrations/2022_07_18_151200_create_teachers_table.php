@@ -18,10 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('last_name');
             $table->bigInteger('phone_number')->unique();
-            $table->string('email', 255)->unique();
-            $table->string('identification_type');
-            $table->bigInteger('identification_number');
-            $table->foreignId('center_id')->references('id')->on('centers')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->boolean('status')->default(true);
 
             $table->timestamps();

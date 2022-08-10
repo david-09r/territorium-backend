@@ -13,10 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('student_tasks', function (Blueprint $table) {
+        Schema::create('areas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id')->references('id')->on('students')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('task_id')->references('id')->on('tasks')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('name');
+            $table->foreignId('formation_id')->references('id')->on('formations')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('teacher_id')->references('id')->on('teachers')->onUpdate('cascade')->onDelete('cascade');
             $table->boolean('status')->default(true);
             $table->timestamps();
         });
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('student_tasks');
+        Schema::dropIfExists('areas');
     }
 };

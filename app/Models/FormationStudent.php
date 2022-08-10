@@ -5,22 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class FormationTeacher extends Model
+class FormationStudent extends Model
 {
-    protected $fillable = [
-      'formation_id',
-      'teacher_id'
-    ];
-
     use HasFactory;
+
+    protected $fillable = [
+        'formation_id',
+        'student_id'
+    ];
 
     public function formation()
     {
         return $this->belongsTo(Formation::class);
     }
 
-    public function teacher()
+    public function student()
     {
-        return $this->belongsTo(Teacher::class);
+        return $this->belongsTo(Student::class);
     }
+
 }

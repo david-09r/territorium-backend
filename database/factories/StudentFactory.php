@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,12 @@ class StudentFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => $this->faker->firstName,
+            'last_name' => $this->faker->lastName,
+            'phone_number' => $this->faker->numberBetween(123123, 1231232),
+            'user_id' => User::factory()->create([
+                'user_type' => 'APRENDIZ'
+            ]),
         ];
     }
 }

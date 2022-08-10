@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('formations', function (Blueprint $table) {
+        Schema::create('formation_students', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('identification')->unique();
+            $table->foreignId('formation_id')->references('id')->on('formations')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('student_id')->references('id')->on('students')->onUpdate('cascade')->onDelete('cascade');
             $table->boolean('status')->default(true);
             $table->timestamps();
         });
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('formations');
+        Schema::dropIfExists('formation_students');
     }
 };

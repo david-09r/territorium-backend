@@ -5,13 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class FormationTeacher extends Model
+class Area extends Model
 {
-    protected $fillable = [
-      'formation_id',
-      'teacher_id'
-    ];
-
     use HasFactory;
 
     public function formation()
@@ -19,8 +14,8 @@ class FormationTeacher extends Model
         return $this->belongsTo(Formation::class);
     }
 
-    public function teacher()
+    public function tasks()
     {
-        return $this->belongsTo(Teacher::class);
+        return $this->hasMany(Task::class);
     }
 }

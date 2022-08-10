@@ -17,7 +17,10 @@ class CenterFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => $this->faker->word,
+            'phone_number' => $this->faker->numberBetween(9999999, 99999999),
+            'location' => $this->faker->address,
+            'city' => $this->faker->city,
         ];
     }
 }

@@ -2,12 +2,13 @@
 
 namespace Database\Factories;
 
+use App\Models\Formation;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Task>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Area>
  */
-class TaskFactory extends Factory
+class AreaFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,9 +18,6 @@ class TaskFactory extends Factory
     public function definition()
     {
         return [
-            'title' => $this->faker->title,
-            'description' => $this->faker->sentence,
-            'answer' => $this->faker->asciify('????'),
         ];
     }
 }

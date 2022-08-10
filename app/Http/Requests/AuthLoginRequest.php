@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class FormationShowRequest extends FormRequest
+class AuthLoginRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,8 @@ class FormationShowRequest extends FormRequest
     public function rules()
     {
         return [
-            'wordFormation' => 'request|string'
+            'email' => 'required|string',
+            'password' => 'required|string'
         ];
     }
 }

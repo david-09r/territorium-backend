@@ -38,11 +38,10 @@ class FormationController extends Controller
         }
     }
 
-    public function show(FormationShowRequest $request)
+    public function show($formationWord)
     {
         try {
-            $request->validated();
-            $response = $this->service->showFormation($request);
+            $response = $this->service->showFormation($formationWord);
             return response()->json(collect(['data' => $response['data']]), $response['code']);
         }catch (\Exception $e){
             return response()->json(collect(['message' => $e->getMessage()]), CodeResponse::INTERNAL_SERVER_ERROR);
