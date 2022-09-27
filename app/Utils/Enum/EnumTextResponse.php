@@ -2,7 +2,7 @@
 
 namespace App\Utils\Enum;
 
-class TextResponse
+class EnumTextResponse
 {
     const TYPE_USER_NOT_VALID = 'El tipo de usuario seleccionado no es valido';
 
@@ -21,4 +21,5 @@ class TextResponse
     const NOT_AREA_FORMATION = 'No tiene areas esta formacion';
 
     const NOT_EXIST_AREA = 'No existe la area';
+
 }

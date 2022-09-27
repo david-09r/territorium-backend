@@ -9,9 +9,9 @@ use App\Models\FormationTeacher;
 use App\Models\Task;
 use App\Models\Teacher;
 use App\Models\User;
-use App\Utils\Enum\CodeResponse;
-use App\Utils\Enum\RoleOrPositions;
-use App\Utils\Enum\TextResponse;
+use App\Utils\Enum\EnumCodeResponse;
+use App\Utils\Enum\EnumRoleOrPositions;
+use App\Utils\Enum\EnumTextResponse;
 use Illuminate\Support\Facades\Auth;
 
 class TaskService
@@ -26,7 +26,7 @@ class TaskService
         try {
             $user = Auth::user();
             switch ($user['user_type']){
-                case RoleOrPositions::STUDENT:
+                case EnumRoleOrPositions::STUDENT:
                     $student = $user->student()->first();
                     $verifyFormation = FormationStudent::where('student_id', $student['id'])
                         ->where('formation_id', $formation_id)
@@ -39,11 +39,11 @@ class TaskService
                             ->get();
 
                     }else {
-                        $data = TextResponse::NOT_DATA_FORMATION;
+                        $data = EnumTextResponse::NOT_DATA_FORMATION;
                     }
                     break;
 
-                case RoleOrPositions::TEACHER:
+                case EnumRoleOrPositions::TEACHER:
                     $teacher = $user->teacher()->first();
                     $verifyFormation = FormationTeacher::where('formation_id', $formation_id)
                         ->where('teacher_id', $teacher['id'])
@@ -55,7 +55,7 @@ class TaskService
                             ->with('tasks')
                             ->get();
                     }else {
-                        $data = TextResponse::NOT_DATA_FORMATION;
+                        $data = EnumTextResponse::NOT_DATA_FORMATION;
                     }
                     break;
 
@@ -67,13 +67,13 @@ class TaskService
 
             return [
                 'data' => $data,
-                'code' => CodeResponse::STATUS_OK
+                'code' => EnumCodeResponse::STATUS_OK
             ];
         }catch (\Exception $e){
-            if($e->getMessage() == CodeResponse::NO_CONTENT){
+            if($e->getMessage() == EnumCodeResponse::NO_CONTENT){
                 return [
                     'data' => null,
-                    'code' => CodeResponse::NO_CONTENT
+                    'code' => EnumCodeResponse::NO_CONTENT
                 ];
             }
             throw new \Exception($e->getMessage());
@@ -85,21 +85,25 @@ class TaskService
         try {
             $user = Auth::user();
             switch ($user['user_type']) {
-                case RoleOrPositions::TEACHER:
+                case EnumRoleOrPositions::TEACHER:
                     $teacher = $user->teacher()->first();
                     $areaId = Area::where('id', $data['area_id'])
                         ->where('teacher_id',  $teacher['id'])
                         ->first();
 
                     if(is_null($areaId)){
-                        throw new \Exception(TextResponse::NOT_EXIST_AREA);
+                        throw new \Exception(EnumTextResponse::NOT_EXIST_AREA);
                     }
                     break;
 
-                case RoleOrPositions::STUDENT:
-                    throw new \Exception(TextResponse::NOT_PERMISSIONS);
+                case EnumRoleOrPositions::STUDENT:
+                    throw new \Exception(EnumTextResponse::NOT_PERMISSIONS);
                 default:
                     $areaId = Area::find($data['area_id']);
+            }
+
+            if(is_null($areaId)) {
+                throw new \Exception(EnumTextResponse::NOT_EXIST_AREA);
             }
 
             $data = Task::create([
@@ -110,18 +114,18 @@ class TaskService
 
             return [
                 'data' => $data,
-                'code' => CodeResponse::CREATED
+                'code' => EnumCodeResponse::CREATED
             ];
         }catch (\Exception $e){
-            if($e->getMessage() == TextResponse::NOT_EXIST_AREA){
+            if($e->getMessage() == EnumTextResponse::NOT_EXIST_AREA){
                 return [
-                    'data' => TextResponse::NOT_EXIST_AREA,
-                    'code' => CodeResponse::STATUS_OK
+                    'data' => EnumTextResponse::NOT_EXIST_AREA,
+                    'code' => EnumCodeResponse::STATUS_OK
                 ];
-            }else if($e->getMessage() == TextResponse::NOT_PERMISSIONS){
+            }else if($e->getMessage() == EnumTextResponse::NOT_PERMISSIONS){
                 return [
-                    'data' => TextResponse::NOT_PERMISSIONS,
-                    'code' => CodeResponse::STATUS_OK
+                    'data' => EnumTextResponse::NOT_PERMISSIONS,
+                    'code' => EnumCodeResponse::STATUS_OK
                 ];
             }
             throw new \Exception($e->getMessage());

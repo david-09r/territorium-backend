@@ -7,7 +7,7 @@ use App\Http\Requests\FormationRequest;
 use App\Http\Requests\FormationShowRequest;
 use App\Models\Formation;
 use App\Services\FormationService;
-use App\Utils\Enum\CodeResponse;
+use App\Utils\Enum\EnumCodeResponse;
 use Illuminate\Http\Request;
 
 class FormationController extends Controller
@@ -23,7 +23,7 @@ class FormationController extends Controller
             $response = $this->service->listFormation();
             return response()->json(collect(['data' => $response['data']]), $response['code']);
         }catch (\Exception $e){
-            return response()->json(collect(['message' => $e->getMessage()]), CodeResponse::INTERNAL_SERVER_ERROR);
+            return response()->json(collect(['message' => $e->getMessage()]), EnumCodeResponse::INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -34,7 +34,7 @@ class FormationController extends Controller
             $response = $this->service->storeFormation($request);
             return response()->json(collect(['data' => $response['data']]), $response['code']);
         } catch (\Exception $e) {
-            return response()->json(collect(['message' => $e->getMessage()]), CodeResponse::INTERNAL_SERVER_ERROR);
+            return response()->json(collect(['message' => $e->getMessage()]), EnumCodeResponse::INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -44,7 +44,7 @@ class FormationController extends Controller
             $response = $this->service->showFormation($formationWord);
             return response()->json(collect(['data' => $response['data']]), $response['code']);
         }catch (\Exception $e){
-            return response()->json(collect(['message' => $e->getMessage()]), CodeResponse::INTERNAL_SERVER_ERROR);
+            return response()->json(collect(['message' => $e->getMessage()]), EnumCodeResponse::INTERNAL_SERVER_ERROR);
         }
     }
 

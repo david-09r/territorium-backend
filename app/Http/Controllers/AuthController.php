@@ -5,9 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Api\ResponseController;
 use App\Http\Requests\AuthLoginRequest;
 use App\Http\Requests\AuthRegisterRequest;
-use App\Http\Requests\AuthRequest;
 use App\Services\AuthService;
-use App\Utils\Enum\CodeResponse;
+use App\Utils\Enum\EnumCodeResponse;
 use Illuminate\Http\Request;
 
 class AuthController extends ResponseController
@@ -23,7 +22,7 @@ class AuthController extends ResponseController
             $response = $this->service->register($request);
             return $this->sendResponse($response['data'], $response['code']);
         }catch (\Exception $e){
-            return $this->sendError($e->getMessage(), CodeResponse::INTERNAL_SERVER_ERROR);
+            return $this->sendError($e->getMessage(), EnumCodeResponse::INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -33,7 +32,7 @@ class AuthController extends ResponseController
             $response = $this->service->login($request);
             return $this->sendResponse($response['data'], $response['code']);
         }catch (\Exception $e){
-            return $this->sendError($e->getMessage(), CodeResponse::INTERNAL_SERVER_ERROR);
+            return $this->sendError($e->getMessage(), EnumCodeResponse::INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -41,6 +40,6 @@ class AuthController extends ResponseController
     {
         auth()->user()->tokens()->delete();
 
-        return $this->sendResponse(['message' => 'Logged Out'], CodeResponse::STATUS_OK);
+        return $this->sendResponse(['message' => 'Logged Out'], EnumCodeResponse::STATUS_OK);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Formation;
+use App\Models\Student;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,8 @@ class FormationStudentFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'formation_id' => Formation::factory(),
+            'student_id' => Student::factory()
         ];
     }
 }

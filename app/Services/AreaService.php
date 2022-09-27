@@ -8,9 +8,9 @@ use App\Models\FormationStudent;
 use App\Models\FormationTeacher;
 use App\Models\Task;
 use App\Models\User;
-use App\Utils\Enum\CodeResponse;
-use App\Utils\Enum\RoleOrPositions;
-use App\Utils\Enum\TextResponse;
+use App\Utils\Enum\EnumCodeResponse;
+use App\Utils\Enum\EnumRoleOrPositions;
+use App\Utils\Enum\EnumTextResponse;
 use Illuminate\Support\Facades\Auth;
 
 class AreaService
@@ -25,7 +25,7 @@ class AreaService
         try {
             $user = Auth::user();
             switch ($user['user_type']){
-                case RoleOrPositions::STUDENT:
+                case EnumRoleOrPositions::STUDENT:
                     $student = $user->student()->first();
                     $verifyFormation = FormationStudent::where('student_id', $student['id'])
                         ->where('formation_id', $formation_id)->get();
@@ -34,11 +34,11 @@ class AreaService
                         $formationsWithArea = Area::where('formation_id', $formation_id)
                             ->get();
                     }else {
-                        throw new \Exception(TextResponse::NOT_PERMISSIONS);
+                        throw new \Exception(EnumTextResponse::NOT_PERMISSIONS);
                     }
                     break;
 
-                case RoleOrPositions::TEACHER:
+                case EnumRoleOrPositions::TEACHER:
                     $teacher = $user->teacher()->first();
                     $verifyFormation = FormationTeacher::where('teacher_id', $teacher['id'])
                         ->where('formation_id', $formation_id)->get();
@@ -48,7 +48,7 @@ class AreaService
                             ->where('teacher_id', $teacher['id'])
                             ->get();
                     }else {
-                        throw new \Exception(TextResponse::NOT_PERMISSIONS);
+                        throw new \Exception(EnumTextResponse::NOT_PERMISSIONS);
                     }
                     break;
                 default:
@@ -56,24 +56,24 @@ class AreaService
             }
 
             if($formationsWithArea->isEmpty()){
-                throw new \Exception(CodeResponse::NO_CONTENT);
+                throw new \Exception(EnumCodeResponse::NO_CONTENT);
             }
 
             return [
                 'data' => $formationsWithArea,
-                'code' => CodeResponse::STATUS_OK
+                'code' => EnumCodeResponse::STATUS_OK
             ];
 
         }catch (\Exception $e){
-            if($e->getMessage() == CodeResponse::NO_CONTENT){
+            if($e->getMessage() == EnumCodeResponse::NO_CONTENT){
                 return [
                     'data' => null,
-                    'code' => CodeResponse::NO_CONTENT
+                    'code' => EnumCodeResponse::NO_CONTENT
                 ];
-            }elseif ($e->getMessage() == TextResponse::NOT_PERMISSIONS){
+            }elseif ($e->getMessage() == EnumTextResponse::NOT_PERMISSIONS){
                 return [
-                    'data' => TextResponse::NOT_PERMISSIONS,
-                    'code' => CodeResponse::STATUS_OK
+                    'data' => EnumTextResponse::NOT_PERMISSIONS,
+                    'code' => EnumCodeResponse::STATUS_OK
                 ];
             }
             throw new \Exception($e->getMessage());

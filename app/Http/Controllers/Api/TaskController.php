@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TaskRequest;
 use App\Models\Task;
 use App\Services\TaskService;
-use App\Utils\Enum\CodeResponse;
+use App\Utils\Enum\EnumCodeResponse;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -22,7 +22,7 @@ class TaskController extends Controller
             $response = $this->service->listTaskAll($formation_id);
             return response()->json(collect(['data' => $response['data']]), $response['code']);
         }catch (\Exception $e){
-            return response()->json(collect(['message' => $e->getMessage()]), CodeResponse::INTERNAL_SERVER_ERROR);
+            return response()->json(collect(['message' => $e->getMessage()]), EnumCodeResponse::INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -33,7 +33,7 @@ class TaskController extends Controller
             $response = $this->service->saveTask($data);
             return response()->json(collect(['data' => $response['data']]), $response['code']);
         }catch (\Exception $e){
-            return response()->json(collect(['message' => $e->getMessage()]), CodeResponse::INTERNAL_SERVER_ERROR);
+            return response()->json(collect(['message' => $e->getMessage()]), EnumCodeResponse::INTERNAL_SERVER_ERROR);
         }
     }
 

@@ -2,7 +2,7 @@
 
 namespace App\Utils\Enum;
 
-class CodeResponse
+class EnumCodeResponse
 {
     const STATUS_OK = 200;
 

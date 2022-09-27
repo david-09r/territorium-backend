@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Area;
 use App\Services\AreaService;
-use App\Utils\Enum\CodeResponse;
+use App\Utils\Enum\EnumCodeResponse;
 use Illuminate\Http\Request;
 
 class AreaController extends Controller
@@ -21,7 +21,7 @@ class AreaController extends Controller
             $response = $this->service->listArea($formationId);
             return response()->json(collect(['data' => $response['data']]), $response['code']);
         }catch (\Exception $e){
-            return response()->json(collect(['message' => $e->getMessage()]), CodeResponse::INTERNAL_SERVER_ERROR);
+            return response()->json(collect(['message' => $e->getMessage()]), EnumCodeResponse::INTERNAL_SERVER_ERROR);
         }
     }
 

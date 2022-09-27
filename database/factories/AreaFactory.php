@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Formation;
+use App\Models\Teacher;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,6 +19,9 @@ class AreaFactory extends Factory
     public function definition()
     {
         return [
+            'name' => $this->faker->title,
+            'formation_id' => Formation::factory(),
+            'teacher_id' => Teacher::factory(),
         ];
     }
 }

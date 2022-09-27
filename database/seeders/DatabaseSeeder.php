@@ -3,11 +3,18 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Area;
 use App\Models\Center;
 use App\Models\Formation;
+use App\Models\FormationStudent;
 use App\Models\FormationTeacher;
+use App\Models\Publication;
 use App\Models\Student;
+use App\Models\StudentTask;
+use App\Models\Task;
 use App\Models\Teacher;
+use App\Models\User;
+use App\Utils\Enum\EnumRoleOrPositions;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -31,11 +38,43 @@ class DatabaseSeeder extends Seeder
              'user_type' => 'ADMIN',
          ]);
 
+         $userStudent = User::factory()->create([
+             'user_type' => EnumRoleOrPositions::STUDENT
+         ]);
 
-        Student::factory(3)->create();
+         $userTeacher = User::factory()->create([
+             'user_type' => EnumRoleOrPositions::TEACHER
+         ]);
 
-        Center::factory(3)->create();
+         $student = Student::factory()->create([
+             'user_id' => $userStudent->id
+         ]);
 
-        FormationTeacher::factory(6)->create();
+         $teacher = Teacher::factory()->create([
+             'user_id' => $userTeacher->id
+         ]);
+
+         $formation = Formation::factory()->create();
+
+         FormationTeacher::factory()->create([
+             'formation_id' => $formation->id,
+             'teacher_id' => $teacher->id
+         ]);
+
+         FormationStudent::factory()->create([
+             'formation_id' => $formation->id,
+             'student_id' => $student->id
+         ]);
+
+         $task = Task::factory()->create();
+
+         $publication = Publication::factory()->create([
+             'formation_id' => $formation->id
+         ]);
+
+         StudentTask::factory()->create([
+             'task_id' => $task->id,
+             'student_id' => $student->id
+         ]);
     }
 }

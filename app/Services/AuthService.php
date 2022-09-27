@@ -2,12 +2,11 @@
 
 namespace App\Services;
 
-use App\Http\Controllers\Api\StudentController;
 use App\Models\Teacher;
 use App\Models\User;
-use App\Utils\Enum\CodeResponse;
-use App\Utils\Enum\RoleOrPositions;
-use App\Utils\Enum\TextResponse;
+use App\Utils\Enum\EnumCodeResponse;
+use App\Utils\Enum\EnumRoleOrPositions;
+use App\Utils\Enum\EnumTextResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -24,7 +23,7 @@ class AuthService
     {
         try {
             switch ($request['user_type']){
-                case RoleOrPositions::STUDENT:
+                case EnumRoleOrPositions::STUDENT:
                     $data = $this->studentService->saveStudent($request);
                     $user = $data['user'];
                     $response = [
@@ -36,7 +35,7 @@ class AuthService
                     ];
                     break;
 
-                case RoleOrPositions::TEACHER:
+                case EnumRoleOrPositions::TEACHER:
                     $data = $this->teacherService->saveTeacher($request);
                     $user = $data['user'];
                     $response = [
@@ -49,18 +48,18 @@ class AuthService
                     break;
 
                 default:
-                    throw new \Exception(TextResponse::TYPE_USER_NOT_VALID);
+                    throw new \Exception(EnumTextResponse::TYPE_USER_NOT_VALID);
             }
 
-            $response['code'] = CodeResponse::CREATED;
+            $response['code'] = EnumCodeResponse::CREATED;
             return $response;
 
         }catch (\Exception $e){
-            if($e->getMessage() == TextResponse::TYPE_USER_NOT_VALID){
+            if($e->getMessage() == EnumTextResponse::TYPE_USER_NOT_VALID){
                 return [
-                    'code' => CodeResponse::STATUS_OK,
+                    'code' => EnumCodeResponse::STATUS_OK,
                     'data' => [
-                        'message' => TextResponse::TYPE_USER_NOT_VALID
+                        'message' => EnumTextResponse::TYPE_USER_NOT_VALID
                     ]
                 ];
             }
@@ -80,14 +79,14 @@ class AuthService
                     ]
                 ];
 
-                $response['code'] = CodeResponse::STATUS_OK;
+                $response['code'] = EnumCodeResponse::STATUS_OK;
                 return $response;
             }
 
             $response = [
-                'code' => CodeResponse::UNAUTHORIZED,
+                'code' => EnumCodeResponse::UNAUTHORIZED,
                 'data' => [
-                    'message' => TextResponse::UNAUTHORIZED
+                    'message' => EnumTextResponse::UNAUTHORIZED
                 ]
             ];
             return $response;

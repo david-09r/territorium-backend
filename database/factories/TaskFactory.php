@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Area;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,7 +20,7 @@ class TaskFactory extends Factory
         return [
             'title' => $this->faker->title,
             'description' => $this->faker->sentence,
-            'answer' => $this->faker->asciify('????'),
+            'area_id' => Area::factory()
         ];
     }
 }

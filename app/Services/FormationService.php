@@ -7,13 +7,12 @@ use App\Models\FormationStudent;
 use App\Models\FormationTeacher;
 use App\Models\Student;
 use App\Models\Teacher;
-use App\Utils\Enum\CodeResponse;
-use App\Utils\Enum\RoleOrPositions;
-use App\Utils\Enum\TextResponse;
+use App\Utils\Enum\EnumCodeResponse;
+use App\Utils\Enum\EnumRoleOrPositions;
+use App\Utils\Enum\EnumTextResponse;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Vtiful\Kernel\Format;
 
 class FormationService
 {
@@ -23,15 +22,15 @@ class FormationService
             $user = Auth::user();
             $data = null;
             $allData = new Collection();
-            if($user['user_type'] == RoleOrPositions::ADMINISTRATOR || $user['user_type'] == RoleOrPositions::SUPERIOR){
+            if($user['user_type'] == EnumRoleOrPositions::ADMINISTRATOR || $user['user_type'] == EnumRoleOrPositions::SUPERIOR){
                 $data = Formation::where('status', true)->get();
             }
-            elseif ($user['user_type'] == RoleOrPositions::TEACHER) {
+            elseif ($user['user_type'] == EnumRoleOrPositions::TEACHER) {
                 $teacher = $user->teacher()->first();
                 $allData = FormationTeacher::with('formation')
                     ->where('teacher_id', $teacher['id'])->get();
             }
-            elseif($user['user_type'] == RoleOrPositions::STUDENT){
+            elseif($user['user_type'] == EnumRoleOrPositions::STUDENT){
                 $student = $user->student()->first();
                 $allData = FormationStudent::with('formation')
                     ->where('student_id', $student['id'])->get();
@@ -40,7 +39,7 @@ class FormationService
             if (is_null($data) && empty($allData->toArray())) {
                 return [
                     'data' => 'No tienes lista de formaciones',
-                    'code' => CodeResponse::STATUS_OK
+                    'code' => EnumCodeResponse::STATUS_OK
                 ];
             }
 
@@ -50,7 +49,7 @@ class FormationService
 
             return [
                 'data' => $data,
-                'code' => CodeResponse::STATUS_OK
+                'code' => EnumCodeResponse::STATUS_OK
             ];
 
         }catch (\Exception $e){
@@ -63,14 +62,14 @@ class FormationService
         DB::beginTransaction();
         try {
             $user = Auth::user();
-            if($user['user_type'] == RoleOrPositions::ADMINISTRATOR || $user['user_type'] == RoleOrPositions::SUPERIOR){
+            if($user['user_type'] == EnumRoleOrPositions::ADMINISTRATOR || $user['user_type'] == EnumRoleOrPositions::SUPERIOR){
                 $data = $request->all();
                 $data['identification'] = $this->identificationFormation($data);
                 $formation = Formation::create($data);
                 foreach ($request['teacher'] as $teacherId){
                     $dataTeacher = Teacher::find($teacherId);
                     if(is_null($dataTeacher)){
-                        throw new \Exception(TextResponse::NOT_FOUND_USER);
+                        throw new \Exception(EnumTextResponse::NOT_FOUND_USER);
                     }
 
                     $formation->formationTeachers()->create([
@@ -81,7 +80,7 @@ class FormationService
                 foreach ($request['student'] as $studentId){
                     $dataStudent = Student::find($studentId);
                     if(is_null($dataStudent)){
-                        throw new \Exception(TextResponse::NOT_FOUND_USER);
+                        throw new \Exception(EnumTextResponse::NOT_FOUND_USER);
                     }
 
                     $formation->formationStudents()->create([
@@ -89,7 +88,7 @@ class FormationService
                     ]);
                 }
             }else {
-                throw new \Exception(TextResponse::NOT_PERMISSIONS);
+                throw new \Exception(EnumTextResponse::NOT_PERMISSIONS);
             }
 
             DB::commit();
@@ -97,23 +96,23 @@ class FormationService
                 'data' => [
                     'message' => 'Formacion creada'
                 ],
-                'code' => CodeResponse::CREATED
+                'code' => EnumCodeResponse::CREATED
             ];
         }catch (\Exception $e){
             DB::rollBack();
-            if($e->getMessage() == TextResponse::NOT_PERMISSIONS ) {
+            if($e->getMessage() == EnumTextResponse::NOT_PERMISSIONS ) {
                 return [
                     'data' => [
-                        'message' => TextResponse::NOT_PERMISSIONS
+                        'message' => EnumTextResponse::NOT_PERMISSIONS
                     ],
-                    'code' => CodeResponse::UNAUTHORIZED
+                    'code' => EnumCodeResponse::UNAUTHORIZED
                 ];
-            }elseif($e->getMessage() == TextResponse::NOT_FOUND_USER){
+            }elseif($e->getMessage() == EnumTextResponse::NOT_FOUND_USER){
                 return [
                     'data' => [
-                        'message' => TextResponse::NOT_FOUND_USER
+                        'message' => EnumTextResponse::NOT_FOUND_USER
                     ],
-                    'code' => CodeResponse::STATUS_OK
+                    'code' => EnumCodeResponse::STATUS_OK
                 ];
             }
             throw new \Exception($e->getMessage());
@@ -125,14 +124,14 @@ class FormationService
         try {
             $user = Auth::user();
             switch ($user['user_type']) {
-                case RoleOrPositions::TEACHER:
+                case EnumRoleOrPositions::TEACHER:
                     $teacher = $user->teacher()->first();
                     $data = FormationTeacher::with([
                         'formation' => fn($query) => $query->where('name', 'LIKE', "%$formationWord%")->get()
                     ])->where('teacher_id', $teacher['id'])->get();
                     break;
 
-                case RoleOrPositions::STUDENT:
+                case EnumRoleOrPositions::STUDENT:
                     $student = $user->student()->first();
                     $data = FormationStudent::with([
                         'formation' => fn($query) => $query->where('name', 'LIKE', "%$formationWord%")->get()
@@ -150,19 +149,19 @@ class FormationService
             }
 
             if(!isset($formations)){
-                throw new \Exception(CodeResponse::NO_CONTENT);
+                throw new \Exception(EnumCodeResponse::NO_CONTENT);
             }
 
             return [
                 'data' => $formations,
-                'code' => CodeResponse::STATUS_OK
+                'code' => EnumCodeResponse::STATUS_OK
             ];
 
         }catch (\Exception $e){
-            if($e->getMessage() == CodeResponse::NO_CONTENT){
+            if($e->getMessage() == EnumCodeResponse::NO_CONTENT){
                 return [
                     'data' => null,
-                    'code' => CodeResponse::NO_CONTENT
+                    'code' => EnumCodeResponse::NO_CONTENT
                 ];
             }
             throw new \Exception($e->getMessage());

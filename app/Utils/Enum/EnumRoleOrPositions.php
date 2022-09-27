@@ -2,7 +2,7 @@
 
 namespace App\Utils\Enum;
 
-class RoleOrPositions
+class EnumRoleOrPositions
 {
     const STUDENT = 'APRENDIZ';
 

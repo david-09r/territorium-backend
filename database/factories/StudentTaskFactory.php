@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Student;
+use App\Models\Task;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,9 @@ class StudentTaskFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'task_id' => Task::factory(),
+            'student_id' => Student::factory(),
+            'answer' => $this->faker->title
         ];
     }
 }
